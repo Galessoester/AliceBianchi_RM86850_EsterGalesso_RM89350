@@ -12,7 +12,7 @@ interface ICatApi {
     ): Call<CatModel>
 
     @GET("{id}")
-    fun gatCat(
+    fun gatCatDatails(
         @Path("id") id:String
     ): Call<BreedModel>
 }
