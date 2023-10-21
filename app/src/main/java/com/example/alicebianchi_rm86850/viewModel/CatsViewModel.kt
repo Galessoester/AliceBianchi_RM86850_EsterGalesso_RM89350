@@ -39,7 +39,7 @@ class CatsViewModel(
     fun getCard(catNumber:Int){
         val endPoint = getCatEndPoint()
         cats?.let {
-            val callBack = endPoint.getCats(it.id, catNumber)
+            val callBack = endPoint.getCats(catNumber)
             callBack.enqueue(object : Callback<CatModel>{
                 override fun onResponse(call: Call<CatModel>, response: Response<CatModel>) {
                     liveCat.value = response.body()
