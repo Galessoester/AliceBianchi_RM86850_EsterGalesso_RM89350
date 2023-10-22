@@ -1,8 +1,8 @@
 package com.example.alicebianchi_rm86850.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alicebianchi_rm86850.model.BreedModel
 import com.example.alicebianchi_rm86850.model.CatModel
 import com.example.alicebianchi_rm86850.model.ICatApi
 import retrofit2.Call
@@ -14,44 +14,36 @@ class CatsViewModel(
     private val retrofitClient: Retrofit
 ) : ViewModel() {
 
-    private var cats: CatModel? = null
+    private val _rmiewState = MutableLiveData<CatViewState>()
+    val catViewState: LiveData<CatViewState> get() = _rmiewState
 
-    val liveCat = MutableLiveData<CatModel>()
-    val liveCatDetails = MutableLiveData<BreedModel>()
-    val liveError = MutableLiveData<String>()
-
-    fun getCatEndPoint(): ICatApi =
-        retrofitClient.create(ICatApi::class.java)
-
-    fun getCatDatails(catDetails:String) {
-        val endPoint = getCatEndPoint()
-        val callBack = endPoint.gatCatDatails(catDetails)
-        callBack.enqueue(object : Callback<BreedModel> {
-            override fun onResponse(call: Call<BreedModel>, response: Response<BreedModel>) {
-                liveCatDetails.value = response.body()
+    fun getCats() {
+        _rmiewState.value = CatViewState.Loading
+        val endPoint = getCatsEndPoint()
+        val callBack = endPoint.getCatImages()
+        callBack.enqueue(object : Callback<CatModel> {
+            override fun onResponse(
+                call: Call<CatModel>, 
+                response: Response<CatModel>
+            ) {
+                _rmiewState.value = CatViewState.Success(response.body()?.breeds)
             }
 
-            override fun onFailure(call: Call<BreedModel>, t: Throwable) {
-                liveError.value = t.message
+            override fun onFailure(call: Call<CatModel>, t: Throwable) {
+                _rmiewState.value = CatViewState.Error(t.message)
             }
-
         })
     }
 
-    fun getCat(catNumber:Int){
-        val endPoint = getCatEndPoint()
-        cats?.let {
-            val callBack = endPoint.getCats(catNumber)
-            callBack.enqueue(object : Callback<CatModel>{
-                override fun onResponse(call: Call<CatModel>, response: Response<CatModel>) {
-                    liveCat.value = response.body()
-                }
+    private fun getCatsEndPoint():ICatApi {
+        return retrofitClient.create(ICatApi::class.java)
+    }
 
-                override fun onFailure(call: Call<CatModel>, t: Throwable) {
-                    liveError.value = t.message
-                }
-            })
-        }
+    fun getCat(i: Int) {
 
     }
+}
+
+private fun <T> Call<T>.enqueue(callback: Callback<CatModel>) {
+
 }

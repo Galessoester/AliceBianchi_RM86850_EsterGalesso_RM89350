@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.alicebianchi_rm86850"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.alicebianchi_rm86850"
@@ -15,6 +15,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        dataBinding {
+            enable = true
+        }
     }
 
     buildTypes {
