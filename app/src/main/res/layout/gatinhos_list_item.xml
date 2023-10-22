@@ -21,23 +21,22 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imgPicture1"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:id="@+id/imgPicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <ImageView
-                android:id="@+id/imgPicture2"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginLeft="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imgPicture1"
-                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/txtCatId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/imgPicture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

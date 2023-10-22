@@ -13,35 +13,40 @@ import retrofit2.Retrofit
 class CatsViewModel(
     private val retrofitClient: Retrofit
 ) : ViewModel() {
-
     private val _rmiewState = MutableLiveData<CatViewState>()
     val catViewState: LiveData<CatViewState> get() = _rmiewState
+
+    val liveCat = MutableLiveData<CatModel>()
+    val liveError = MutableLiveData<String>()
+
+    private var cat: CatModel? = null
 
     fun getCats() {
         _rmiewState.value = CatViewState.Loading
         val endPoint = getCatsEndPoint()
         val callBack = endPoint.getCatImages()
         callBack.enqueue(object : Callback<CatModel> {
-            override fun onResponse(
-                call: Call<CatModel>, 
-                response: Response<CatModel>
-            ) {
-                _rmiewState.value = CatViewState.Success(response.body()?.breeds)
+            override fun onResponse(call: Call<CatModel>, response: Response<CatModel>) {
+                cat = response.body()
+                liveCat.value = cat
+                // _rmiewState.value = CatViewState.Success(response.body()?.breeds)
             }
 
             override fun onFailure(call: Call<CatModel>, t: Throwable) {
-                _rmiewState.value = CatViewState.Error(t.message)
+                liveError.value = t.message
+                //_rmiewState.value = CatViewState.Error(t.message)
             }
         })
     }
 
-    private fun getCatsEndPoint():ICatApi {
+    private fun getCatsEndPoint(): ICatApi {
         return retrofitClient.create(ICatApi::class.java)
     }
 
     fun getCat(i: Int) {
 
     }
+
 }
 
 private fun <T> Call<T>.enqueue(callback: Callback<CatModel>) {
